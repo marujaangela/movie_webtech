@@ -1,8 +1,5 @@
 package htw_berlin.movie_webtech.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,38 +8,36 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "genres") // Vermeidet potenzielle Endlosschleifen in bidirektionalen Beziehungen
 public class Movie {
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        private String title; // Titel des Films
+        private String title;
+        private String description;
+        private int releaseYear;
+        private String imageUrl;
+        private boolean watched;
 
-        @Column(length = 1000)
-        private String description; // Beschreibung des Films
-
-        private int releaseYear; // Veröffentlichungsjahr des Films
-
-        private String imageUrl; // URL des Film-Bildes
-
-        private boolean watched; // Gibt an, ob der Film gesehen wurde
-
-        @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        @ManyToMany(cascade = CascadeType.PERSIST) // Performance-Optimierung durch LAZY Loading
         @JoinTable(
                 name = "movie_genre",
                 joinColumns = @JoinColumn(name = "movie_id"),
                 inverseJoinColumns = @JoinColumn(name = "genre_id")
         )
-        private Set<Genre> genres; // Beziehung zu Genres
+        private Set<Genre> genres;
 
-        public Movie(Long id, String title, int releaseYear, String description, String imageUrl, String genre) {
-                this.id = id;
+        // Benutzerdefinierter Konstruktor (ohne ID, für neue Einträge)
+        public Movie(String title, String description, int releaseYear, String imageUrl, boolean watched, Set<Genre> genres) {
                 this.title = title;
-                this.releaseYear = releaseYear;
                 this.description = description;
+                this.releaseYear = releaseYear;
                 this.imageUrl = imageUrl;
+                this.watched = watched;
+                this.genres = genres;
         }
 }
