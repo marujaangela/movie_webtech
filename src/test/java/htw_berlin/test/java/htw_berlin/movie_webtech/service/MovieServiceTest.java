@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
  * Testklasse für MovieService.
  * Testet die grundlegenden Funktionen des MovieService.
  */
-@SpringBootTest
+//@SpringBootTest
 public class MovieServiceTest {
 //
 //    @Autowired
