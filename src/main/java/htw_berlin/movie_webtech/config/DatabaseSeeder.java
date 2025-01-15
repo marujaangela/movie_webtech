@@ -1,11 +1,11 @@
 package htw_berlin.movie_webtech.config;
 
-import htw_berlin.movie_webtech.model.Genre;
-import htw_berlin.movie_webtech.model.Movie;
-import htw_berlin.movie_webtech.persistence.GenreRepository;
-import htw_berlin.movie_webtech.persistence.MovieRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
+//import htw_berlin.movie_webtech.model.Genre;
+//import htw_berlin.movie_webtech.model.Movie;
+//import htw_berlin.movie_webtech.persistence.GenreRepository;
+//import htw_berlin.movie_webtech.persistence.MovieRepository;
+//import org.springframework.boot.CommandLineRunner;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;

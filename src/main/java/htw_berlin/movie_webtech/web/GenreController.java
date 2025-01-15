@@ -28,8 +28,7 @@ public class GenreController {
     @GetMapping("/{id}")
     public ResponseEntity<Genre> getGenre(@PathVariable("id") final Long id) {
         final Optional<Genre> genreOptional = genreService.getGenre(id);
-        if (!genreOptional.isPresent()) return ResponseEntity.notFound().build();
-        else return ResponseEntity.ok(genreOptional.get());
+        return genreOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Ein neues Genre hinzufügen

@@ -31,8 +31,7 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovie(@PathVariable("id") final Long id) {
         final Optional<Movie> movieOptional = movieService.getMovie(id);
-        if (!movieOptional.isPresent()) return ResponseEntity.notFound().build();
-        else return ResponseEntity.ok(movieOptional.get());
+        return movieOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Einen neuen Film hinzufügen
