@@ -19,38 +19,36 @@ public class GenreController {
     private final GenreService genreService;
 
     // Alle Genres abrufen
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<Iterable<Genre>> getGenres() {
         return ResponseEntity.ok(genreService.getGenres());
     }
 
-    // Ein bestimmtes Genre abrufen
+    // Ein Genre anhand der ID abrufen
     @GetMapping("/{id}")
-    public ResponseEntity<Genre> getGenre(@PathVariable("id") final Long id) {
-        final Optional<Genre> genreOptional = genreService.getGenre(id);
-        return genreOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Genre> getGenre(@PathVariable Long id) {
+        return genreService.getGenre(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Ein neues Genre hinzufügen
+    // Ein neues Genre erstellen
     @PostMapping
-    public ResponseEntity<Genre> addGenre(@Valid @RequestBody final Genre genre) {
-        final Genre created = genreService.addGenre(genre);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
+        return new ResponseEntity<>(genreService.addGenre(genre), HttpStatus.CREATED);
     }
 
-    // Ein Genre aktualisieren
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<Genre> updateGenre(@PathVariable("id") final Long id, @RequestBody Genre body) {
-        body.setId(id); // ID aus der URL in das Body-Objekt übernehmen
-        final Genre updatedGenre = genreService.editGenre(body);
-        return updatedGenre == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(updatedGenre);
+    // Ein Genre bearbeiten
+    @PutMapping("/{id}")
+    public ResponseEntity<Genre> editGenre(@PathVariable Long id, @RequestBody Genre body) {
+        body.setId(id); // ID aus der URL übernehmen
+        Genre updatedGenre = genreService.editGenre(body);
+        return updatedGenre != null ? ResponseEntity.ok(updatedGenre) : ResponseEntity.notFound().build();
     }
 
     // Ein Genre löschen
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteGenre(@PathVariable("id") final Long id) {
-        return genreService.removeGenre(id)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeGenre(@PathVariable Long id) {
+        return genreService.removeGenre(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

@@ -21,7 +21,7 @@ public class GenreService {
     }
 
     // Ein bestimmtes Genre abrufen
-    public Optional<Genre> getGenre(Long id) {
+    public Optional<Genre> getGenre(long id) {
         return repository.findById(id);
     }
 
@@ -37,7 +37,7 @@ public class GenreService {
     }
 
     // Ein Genre löschen
-    public boolean removeGenre(Long id) {
+    public boolean removeGenre(long id) {
         if (!repository.existsById(id)) return false;
         repository.deleteById(id);
         return true;
