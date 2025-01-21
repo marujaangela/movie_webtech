@@ -37,16 +37,26 @@ public class MovieController {
     // Einen neuen Film hinzufügen
     @PostMapping
     public ResponseEntity<Movie> addMovie(@Valid @RequestBody final Movie movie) {
-        final Movie created = movieService.addMovie(movie);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        try {
+            final Movie created = movieService.addMovie(movie);
+            return new ResponseEntity<>(created, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     // Einen bestehenden Film aktualisieren
     @PutMapping(path = "/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable("id") final Long id, @RequestBody Movie body) {
         body.setId(id); // ID aus der URL in das Body-Objekt übernehmen
-        final Movie updatedMovie = movieService.editMovie(body);
-        return updatedMovie == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(updatedMovie);
+        try {
+            final Movie updatedMovie = movieService.editMovie(body);
+            return updatedMovie == null
+                    ? ResponseEntity.notFound().build()
+                    : ResponseEntity.ok(updatedMovie);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     // Einen Film löschen
@@ -57,10 +67,10 @@ public class MovieController {
                 : ResponseEntity.notFound().build();
     }
 
-    // Filme nach Genre filtern
-    @GetMapping("/genre")
-    public ResponseEntity<Iterable<Movie>> getMoviesByGenre(@RequestParam String genre) {
-        final Iterable<Movie> result = movieService.getMoviesByGenre(genre);
+    // Filme nach Genre-ID filtern (numerische ID verwenden)
+    @GetMapping("/genre/{genreId}")
+    public ResponseEntity<Iterable<Movie>> getMoviesByGenre(@PathVariable Long genreId) {
+        final Iterable<Movie> result = movieService.getMoviesByGenreId(genreId);
         return ResponseEntity.ok(result);
     }
 
@@ -71,4 +81,3 @@ public class MovieController {
         return ResponseEntity.ok(result);
     }
 }
-

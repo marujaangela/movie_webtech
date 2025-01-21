@@ -3,8 +3,8 @@ package htw_berlin.movie_webtech.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,13 +16,10 @@ public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id; // Numerische ID
+    private String name; // Name des Genres
 
-    private String name;
-
-    @ManyToMany(mappedBy = "genres")
-    private Set<Movie> movies = new HashSet<>();
-
+    // Konstruktor für neue Genre-Einträge
     public Genre(String name) {
         this.name = name;
     }

@@ -41,12 +41,11 @@ public class SsrController {
         return new ModelAndView("genres");
     }
 
-    // Seite mit einer Liste von Filmen nach Genre
-    @GetMapping(path = "/genres/{name}/movies")
-    public ModelAndView showMoviesByGenre(@PathVariable String name, Model model) {
-        model.addAttribute("movies", movieService.getMoviesByGenre(name));
-        model.addAttribute("genreName", name);
+    // Seite mit einer Liste von Filmen nach Genre-ID
+    @GetMapping(path = "/genres/{id}/movies")
+    public ModelAndView showMoviesByGenre(@PathVariable Long id, Model model) {
+        model.addAttribute("movies", movieService.getMoviesByGenreId(id));
+        genreService.getGenre(id).ifPresent(genre -> model.addAttribute("genreName", genre.getName()));
         return new ModelAndView("movies_by_genre");
     }
 }
-
